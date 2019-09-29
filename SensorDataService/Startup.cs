@@ -31,7 +31,7 @@ namespace SensorDataService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<SensorDataService>();
 
                 endpoints.MapGet("/", async context =>
                 {

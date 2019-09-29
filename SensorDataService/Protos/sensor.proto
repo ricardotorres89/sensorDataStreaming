@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "SensorDataService";
+
+package Sensors;
+
+// The sensor data service definition.
+service Sensors {
+  // Retrieves Sensor Pressure Data
+  rpc GetSensorPresure (PressureDataRequest) returns (stream PressureDataReply);
+}
+
+// The request message containing the sensor's name.
+message PressureDataRequest {
+  string sensorName = 1;
+}
+
+// The response message containing the sensor pressure.
+message PressureDataReply {
+  string sensorName = 1;
+  double pressure = 2;
+}
