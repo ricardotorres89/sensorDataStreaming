@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace StreamingClient
 {
@@ -12,12 +13,20 @@ namespace StreamingClient
         static async Task Main(string[] args)
         {
             
-            // Receive data from indoor sensor
-            var indoorDataStream = _sensorDataService.GetSensorPresure("Sensor1");
+            // Receive data from sensors
+            var indoorDataStream = _sensorDataService.GetSensorPresure("IndoorSensor");
+            var outdoorDataStream = _sensorDataService.GetSensorPresure("OutdoorSensor");
 
-            await foreach(var pressureDataPoint in indoorDataStream)
+            // Combine Indoor and outdoor data and generate alerts if pressure dirrence is above 20
+            var pressureDataAlerts = indoorDataStream
+                                        .Zip(outdoorDataStream)
+                                        .Select(combined => Math.Abs(combined.First.Pressure - combined.Second.Pressure))
+                                        .Where(v => v > 20);
+
+
+            await foreach(var deltaPressure in pressureDataAlerts)
             {
-                Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} - Pressure for {pressureDataPoint.SensorName}: {pressureDataPoint.Pressure}");
+                Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} - ALERT Pressure difference {deltaPressure}");
             }
         }
     }

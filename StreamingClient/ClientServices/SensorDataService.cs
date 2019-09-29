@@ -26,7 +26,6 @@ namespace StreamingClient.ClientServices
             {
                 SensorName = sensorName
             });
-
             return request.ResponseStream.ReadAllAsync();
         }
     }

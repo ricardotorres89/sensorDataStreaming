@@ -36,6 +36,7 @@ namespace SensorDataService
                         Pressure = _random.NextDouble() * (_maxValue - _minValue) + _minValue
                     };
                     await responseStream.WriteAsync(sensorPressure);
+                    Console.WriteLine($"{DateTime.Now.ToString("hh:mm:ss.fff")} - Pressure for {sensorPressure.SensorName}: {sensorPressure.Pressure}");
                 }
                 catch (Exception ex)
                 {
